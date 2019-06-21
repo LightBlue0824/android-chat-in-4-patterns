@@ -24,7 +24,19 @@ public class ItemTextSend extends LinearLayout implements View.OnLongClickListen
     private UUID messageId;
     @Setter private OnRecallMessageRequested onRecallMessageRequested;
 
-    public ItemTextSend(Context context, String text, UUID messageId, OnRecallMessageRequested onRecallMessageRequested) {
+//    public ItemTextSend(Context context, String text, UUID messageId, OnRecallMessageRequested onRecallMessageRequested) {
+//        super(context);
+//        this.context = context;
+//        inflate(context, R.layout.item_text_send, this);
+//        this.textView = findViewById(R.id.chat_item_content_text);
+//        this.messageId = messageId;
+//        this.onRecallMessageRequested = onRecallMessageRequested;
+//
+//        this.setOnLongClickListener(this);
+//        setText(text);
+//    }
+
+    public ItemTextSend(Context context, CharSequence text, UUID messageId, OnRecallMessageRequested onRecallMessageRequested) {
         super(context);
         this.context = context;
         inflate(context, R.layout.item_text_send, this);
@@ -40,7 +52,11 @@ public class ItemTextSend extends LinearLayout implements View.OnLongClickListen
         return textView.getText().toString();
     }
 
-    public void setText(String text) {
+//    public void setText(String text) {
+//        textView.setText(text);
+//    }
+
+    public void setText(CharSequence text) {
         textView.setText(text);
     }
 
