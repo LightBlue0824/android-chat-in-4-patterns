@@ -59,14 +59,15 @@ public class Hw1TalkActivity extends AppCompatActivity implements Hw1Contract.Vi
                     content.removeAllViews();
 
                     // 增加ItemText
-                    for (ClientMessage message : messages) {
-                        String text = String.format("%s", message.getMessage());
-                        if(isMarkdownImg(text)){
-                            new Thread(() -> {
+                    new Thread(() -> {
+                        for (ClientMessage message : messages) {
+                            String text = String.format("%s", message.getMessage());
+                            if(isMarkdownImg(text)){
+
                                 String[] t_strs = text.split("!\\[.*\\]");
                                 String url = t_strs[t_strs.length-1];
                                 url = url.substring(1, url.length()-1);
-//                                url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560850457503&di=07283544224fa5ebad3dbe942fc70759&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201803%2F19%2F20180319235316_iinoc.jpg";
+                                //url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1560850457503&di=07283544224fa5ebad3dbe942fc70759&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201803%2F19%2F20180319235316_iinoc.jpg";
                                 //只考虑网络图片
                                 String img_html = "<img src='" + url + "'>";
                                 CharSequence charSequence_t;
@@ -93,23 +94,19 @@ public class Hw1TalkActivity extends AppCompatActivity implements Hw1Contract.Vi
                                     }
                                     Utils.scrollListToBottom(this);
                                 });
-                            }).start();
-                        }
-                        else{
-                            // 如果是自己发的，增加ItemTextSend
-                            if (message.getSenderUsername().equals(this.presenter.getUsername())) {
-                                content.addView(new ItemTextSend(this, text, message.getMessageId(), this));
-                            } else {
-                                content.addView(new ItemTextReceive(this, text, message.getMessageId()));
+                            }
+                            else{
+                                // 如果是自己发的，增加ItemTextSend
+                                runOnUiThread(() -> {
+                                    if (message.getSenderUsername().equals(this.presenter.getUsername())) {
+                                        content.addView(new ItemTextSend(this, text, message.getMessageId(), this));
+                                    } else {
+                                        content.addView(new ItemTextReceive(this, text, message.getMessageId()));
+                                    }
+                                });
                             }
                         }
-//                        // 如果是自己发的，增加ItemTextSend
-//                        if (message.getSenderUsername().equals(this.presenter.getUsername())) {
-//                            content.addView(new ItemTextSend(this, text, message.getMessageId(), this));
-//                        } else {
-//                            content.addView(new ItemTextReceive(this, text, message.getMessageId()));
-//                        }
-                    }
+                    }).start();
 
                     Utils.scrollListToBottom(this);
                 }
